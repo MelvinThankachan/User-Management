@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.input-field {
+  @apply w-full p-2 border border-gray-300 rounded;
+}
+
+.input-label {
+  @apply block text-sm text-gray-600 font-medium mb-1;
+}
+
+.submit-button {
+  @apply w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition;
+}
