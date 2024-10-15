@@ -2,18 +2,19 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import UserHomePage from "./pages/UserHomePage";
+import HomePage from "./pages/HomePage";
+
 import {
   createBrowserRouter,
   RouteObject,
   RouterProvider,
 } from "react-router-dom";
-import UserProfilePage from "./pages/UserProfilePage";
+import ProfilePage from "./pages/ProfilePage";
 
 const appRoutes: RouteObject[] = [
   {
-    path: "/user-home",
-    element: <UserHomePage />,
+    path: "/",
+    element: <HomePage />,
   },
   {
     path: "/login",
@@ -25,7 +26,7 @@ const appRoutes: RouteObject[] = [
   },
   {
     path: "/user-profile",
-    element: <UserProfilePage />,
+    element: <ProfilePage />,
   },
 ];
 

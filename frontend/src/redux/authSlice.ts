@@ -4,6 +4,7 @@ type User = {
   name: string;
   email: string;
   profileImage: string;
+  isAdmin: boolean
 };
 
 type AuthState = {

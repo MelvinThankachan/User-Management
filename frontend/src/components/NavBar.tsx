@@ -10,7 +10,8 @@ const NavBar = () => {
 
   const user = useSelector((state: any) => state.auth.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+console.log(user);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -18,14 +19,17 @@ const NavBar = () => {
 
   const handleLogout = () => {
     console.log("Logging out...");
+    setIsDropdownOpen(false);
     dispatch(clearAuth());
-    navigate("/user-home")
+    navigate("/");
   };
   return (
     <nav className="bg-gray-500 shadow">
       <div className="container mx-auto flex items-center justify-between p-4">
-        <Link to="/user-home">
-          <h1 className="text-xl font-bold">User Home</h1>
+        <Link to="/">
+          <h1 className="text-xl font-bold">
+            {user ? (user.isAdmin ? "Admin Home" : "User Home") : "Home"}
+          </h1>
         </Link>
         <div className="relative">
           {user ? (

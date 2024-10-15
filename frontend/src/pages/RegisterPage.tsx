@@ -16,7 +16,7 @@ const RegisterPage: React.FC = () => {
   const user = useSelector((state: any) => state.auth.user);
   useEffect(() => {
     if (user) {
-      navigate("/user-home");
+      navigate("/");
     }
   }, [user, navigate]);
 

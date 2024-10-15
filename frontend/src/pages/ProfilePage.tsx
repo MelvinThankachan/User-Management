@@ -5,13 +5,13 @@ import { getImageURL } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-const UserProfilePage = () => {
+const ProfilePage = () => {
   const user = useSelector((state: any) => state.auth.user);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
-      navigate("/user-home");
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -36,6 +36,7 @@ const UserProfilePage = () => {
           <div className="ml-4">
             <p className="text-lg font-bold">{user?.name || "John Doe"}</p>
             <p className="text-gray-600">{user?.email || "john@example.com"}</p>
+            {user?.isAdmin && <p className="text-gray-600">Admin User</p>}
           </div>
         </div>
       </div>
@@ -43,4 +44,4 @@ const UserProfilePage = () => {
   );
 };
 
-export default UserProfilePage;
+export default ProfilePage;

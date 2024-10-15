@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
   const user = useSelector((state: any) => state.auth.user);
   useEffect(() => {
     if (user) {
-      navigate("/user-home");
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -49,11 +49,13 @@ const LoginPage: React.FC = () => {
             name: response.data.user.name,
             email: response.data.user.email,
             profileImage: response.data.user.profileImage,
+            isAdmin: response.data.user.isAdmin,
           },
         })
       );
+      console.log(response.data.user);
 
-      navigate("/user-home");
+      navigate("/");
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         setError(

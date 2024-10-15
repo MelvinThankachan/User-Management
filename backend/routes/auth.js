@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const User = require("../models/User");
+const { default: verifyAdmin } = require("../middlewares/verifyAdmin");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -56,6 +57,16 @@ router.post("/login", async (req, res) => {
     expiresIn: "15m",
   });
   res.json({ token, user });
+});
+
+// Route to get all users
+app.get("/api/users", verifyAdmin, async (req, res) => {
+  try {
+    const users = await User.find({ isAdmin: false });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 module.exports = router;
