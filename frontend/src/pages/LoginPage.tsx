@@ -1,12 +1,25 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth } from "../redux/authSlice";
+import axiosInstance from "../utils/axios";
+import axios from "axios";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const user = useSelector((state: any) => state.auth.user);
+  useEffect(() => {
+    if (user) {
+      navigate("/user-home");
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -23,10 +36,33 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    console.log("Email:", email);
-    console.log("Password:", password);
-    setEmail("");
-    setPassword("");
+    try {
+      const response = await axiosInstance.post("auth/login", {
+        email,
+        password,
+      });
+
+      dispatch(
+        setAuth({
+          token: response.data.token,
+          user: {
+            name: response.data.user.name,
+            email: response.data.user.email,
+            profileImage: response.data.user.profileImage,
+          },
+        })
+      );
+
+      navigate("/user-home");
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        setError(
+          err.response.data.message || "Login failed. Please try again."
+        );
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    }
   };
 
   return (
@@ -62,13 +98,7 @@ const LoginPage: React.FC = () => {
               className="input-field"
             />
           </div>
-          {error ? (
-            <p className="text-red-500 text-sm">{error}</p>
-          ) : (
-            <p className="text-blue-500 text-sm">
-              Password must be at least 6 characters long.
-            </p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
           <button type="submit" className="submit-button">
             Login
           </button>

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import imagePlaceholder from "../assets/images/profile-image-placeholder.jpg";
+import axiosInstance from "../utils/axios";
+import { useSelector } from "react-redux";
 
 const RegisterPage: React.FC = () => {
   const [name, setName] = useState("");
@@ -9,8 +11,16 @@ const RegisterPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const user = useSelector((state: any) => state.auth.user);
+  useEffect(() => {
+    if (user) {
+      navigate("/user-home");
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -39,12 +49,26 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Profile Photo:", profilePhoto);
-  };
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("profileImage", profilePhoto);
 
+    try {
+      const response = await axiosInstance.post("/auth/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("Registration successful:", response.data);
+      navigate("/login");
+    } catch (err) {
+      setError("Registration failed. Please try again.");
+      console.error("Registration error:", err);
+    }
+  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setProfilePhoto(e.target.files[0]);
@@ -66,7 +90,7 @@ const RegisterPage: React.FC = () => {
               placeholder="Name"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value.trim())}
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
@@ -80,7 +104,7 @@ const RegisterPage: React.FC = () => {
               placeholder="Email Address"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim())}
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>

@@ -22,7 +22,6 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const profileImage = req.file ? `/uploads/${req.file.filename}` : null;
 
     const user = new User({
@@ -33,7 +32,12 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
     });
 
     await user.save();
-    res.status(201).json({ message: "User registered", user });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    res.status(201).json({ message: "User registered", token, user });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
