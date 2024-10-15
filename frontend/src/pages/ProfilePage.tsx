@@ -19,7 +19,7 @@ const ProfilePage = () => {
     return null;
   }
 
-  console.log(getImageURL(user.profileImage));
+  // console.log(getImageURL(user.profileImage));
 
   return (
     <div className="min-h-screen bg-gray-200">

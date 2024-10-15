@@ -1,7 +1,7 @@
-// src/redux/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
-import { isTokenExpired } from "../utils/tokenUtils"; // Import the utility function
+import userReducer from "./usersSlice";
+import { isTokenExpired } from "../utils/tokenUtils";
 
 const loadAuthState = () => {
   const token = localStorage.getItem("token");
@@ -25,6 +25,7 @@ const loadAuthState = () => {
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    users: userReducer,
   },
   preloadedState: {
     auth: loadAuthState(),
@@ -32,3 +33,5 @@ const store = configureStore({
 });
 
 export default store;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

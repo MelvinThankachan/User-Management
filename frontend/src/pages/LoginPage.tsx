@@ -53,7 +53,7 @@ const LoginPage: React.FC = () => {
           },
         })
       );
-      console.log(response.data.user);
+      // console.log(response.data.user);
 
       navigate("/");
     } catch (err) {

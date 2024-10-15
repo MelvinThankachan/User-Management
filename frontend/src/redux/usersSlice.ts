@@ -15,13 +15,16 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.users = action.payload;
-      console.log(state.users)
+      // console.log(state.users);
     });
+    //   .addCase(fetchUsers.rejected, (state, action) => {
+    //     console.log("Error");
+    //   })
+    //   .addCase(fetchUsers.pending, (state, action) => {
+    //     console.log("Pending");
+    //   });
   },
 });
 
 export const selectUsers = (state: any) => state.users.users;
-export const selectLoading = (state: any) => state.users.loading;
-export const selectError = (state: any) => state.users.error;
-
 export default userSlice.reducer;

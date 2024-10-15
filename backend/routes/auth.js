@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const User = require("../models/User");
-const { default: verifyAdmin } = require("../middlewares/verifyAdmin");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -17,6 +16,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const router = express.Router();
+
+// Middleware
+function verifyAdmin(req, res, next) {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(403).json({ message: "Access denied." });
+  }
+}
 
 // Register route
 router.post("/register", upload.single("profileImage"), async (req, res) => {
@@ -48,19 +56,25 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (!user) return res.status(400).json({ message: "User not found" });
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "15m",
-  });
+  const token = jwt.sign(
+    { id: user._id, isAdmin: user.isAdmin },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "15m",
+    }
+  );
+
   res.json({ token, user });
 });
 
-// Route to get all users
-app.get("/api/users", verifyAdmin, async (req, res) => {
+// Route to users
+router.get("/users", verifyAdmin, async (req, res) => {
   try {
     const users = await User.find({ isAdmin: false });
     res.json(users);

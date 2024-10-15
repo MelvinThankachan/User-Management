@@ -11,7 +11,6 @@ const NavBar = () => {
   const user = useSelector((state: any) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-console.log(user);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
