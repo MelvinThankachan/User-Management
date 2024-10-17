@@ -23,15 +23,15 @@ const NavBar = () => {
     navigate("/");
   };
   return (
-    <nav className="bg-gray-500 shadow">
+    <nav className="bg-primary shadow">
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link to="/">
           <h1 className="text-xl font-bold">
             {user ? (user.isAdmin ? "Admin Home" : "User Home") : "Home"}
           </h1>
         </Link>
-        <div className="relative">
-          {user ? (
+        {user ? (
+          <div className="relative">
             <div className="flex gap-5">
               <img
                 src={user ? getImageURL(user.profileImage) : profilePlaceHolder}
@@ -56,32 +56,27 @@ const NavBar = () => {
                 </svg>
               </button>
             </div>
-          ) : (
-            <Link
-              to="/login"
-              className="submit-button max-w-40 text-center mt-10"
-            >
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-tertiary shadow-lg shadow-primary  rounded">
+                <ul className="py-2">
+                  <Link to="/user-profile">
+                    <li className="dropdown-item">User Profile</li>
+                  </Link>
+                  <li className="dropdown-item" onClick={handleLogout}>
+                    Logout
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="w-28 flex">
+            <Link to="/login" className="submit-button">
               Login
             </Link>
-          )}
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded">
-              <ul className="py-2">
-                <Link to="/user-profile">
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    User Profile
-                  </li>
-                </Link>
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </nav>
   );

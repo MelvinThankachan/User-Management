@@ -2,8 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+  @apply text-white bg-secondary;
+}
+
 .input-field {
-  @apply w-full p-2 border border-gray-300 rounded;
+  @apply w-full p-2 border border-tertiary bg-tertiary rounded outline-none focus:outline-white;
 }
 
 .input-label {
@@ -11,5 +15,9 @@
 }
 
 .submit-button {
-  @apply w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition;
+  @apply w-full bg-white text-black text-center p-2 rounded hover:scale-[0.975] transition-all duration-200;
+}
+
+.dropdown-item {
+  @apply px-4 py-2 hover:bg-primary cursor-pointer mx-1 rounded;
 }

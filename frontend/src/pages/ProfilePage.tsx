@@ -19,24 +19,22 @@ const ProfilePage = () => {
     return null;
   }
 
-  // console.log(getImageURL(user.profileImage));
-
   return (
-    <div className="min-h-screen bg-gray-200">
+    <div className="min-h-screen flex flex-col gap-5">
       <NavBar />
 
-      <div className="container mx-auto mt-6 p-4 bg-white shadow rounded">
-        <h2 className="text-2xl font-semibold mb-4">User Details</h2>
+      <div className="container mx-auto p-4 bg-tertiary shadow rounded-lg border border-tertiary flex flex-col gap-4">
+        <h2 className="text-2xl font-semibold ">User Details</h2>
         <div className="flex items-center">
           <img
             src={user ? getImageURL(user.profileImage) : profilePlaceHolder}
             alt="Profile"
-            className="w-24 h-24 rounded-full border-2 border-gray-300"
+            className="w-24 h-24 rounded-full border-2 border-white"
           />
           <div className="ml-4">
             <p className="text-lg font-bold">{user?.name || "John Doe"}</p>
-            <p className="text-gray-600">{user?.email || "john@example.com"}</p>
-            {user?.isAdmin && <p className="text-gray-600">Admin User</p>}
+            <p className="text-gray-400">{user?.email || "john@example.com"}</p>
+            {user?.isAdmin && <p className="text-gray-400">Admin User</p>}
           </div>
         </div>
       </div>

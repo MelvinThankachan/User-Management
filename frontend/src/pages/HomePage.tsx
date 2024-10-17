@@ -23,7 +23,7 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-200">
+    <div className="min-h-screen">
       <NavBar />
       <div className="flex items-center justify-center h-full">
         {user ? (

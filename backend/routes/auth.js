@@ -17,7 +17,7 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-// Middleware
+
 function verifyAdmin(req, res, next) {
   if (req.user && req.user.isAdmin) {
     next();
