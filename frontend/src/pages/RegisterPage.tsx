@@ -9,7 +9,7 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ const RegisterPage: React.FC = () => {
       setError("Passwords do not match.");
       return;
     }
-    if (!profilePhoto) {
+    if (!profileImage) {
       setError("Profile photo is required.");
       return;
     }
@@ -53,7 +53,7 @@ const RegisterPage: React.FC = () => {
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
-    formData.append("profileImage", profilePhoto);
+    formData.append("profileImage", profileImage);
 
     try {
       const response = await axiosInstance.post("/auth/register", formData, {
@@ -71,7 +71,7 @@ const RegisterPage: React.FC = () => {
   };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setProfilePhoto(e.target.files[0]);
+      setProfileImage(e.target.files[0]);
     }
   };
 
@@ -141,9 +141,9 @@ const RegisterPage: React.FC = () => {
               Profile Photo
             </label>
             <div className="w-24 h-24 border border-gray-300 rounded-full overflow-hidden mb-2">
-              {profilePhoto ? (
+              {profileImage ? (
                 <img
-                  src={URL.createObjectURL(profilePhoto)}
+                  src={URL.createObjectURL(profileImage)}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
@@ -166,7 +166,7 @@ const RegisterPage: React.FC = () => {
               htmlFor="profile-photo"
               className="cursor-pointer bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
             >
-              {profilePhoto ? "Change Image" : "Upload Image"}
+              {profileImage ? "Change Image" : "Upload Image"}
             </label>
           </div>
 

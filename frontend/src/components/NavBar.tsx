@@ -23,7 +23,7 @@ const NavBar = () => {
     navigate("/");
   };
   return (
-    <nav className="bg-primary shadow">
+    <nav className="bg-primary shadow w-screen">
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link to="/">
           <h1 className="text-xl font-bold">
