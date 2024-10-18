@@ -10,11 +10,14 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage";
+import UsersTablePage from "./pages/UsersTablePage";
+import PageNotFoundPage from "./pages/PageNotFoundPage";
 
 const appRoutes: RouteObject[] = [
   {
     path: "/",
     element: <HomePage />,
+    errorElement: <PageNotFoundPage />,
   },
   {
     path: "/login",
@@ -27,6 +30,10 @@ const appRoutes: RouteObject[] = [
   {
     path: "/user-profile",
     element: <ProfilePage />,
+  },
+  {
+    path: "/users-table",
+    element: <UsersTablePage />,
   },
 ];
 

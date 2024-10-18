@@ -17,15 +17,6 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-
-function verifyAdmin(req, res, next) {
-  if (req.user && req.user.isAdmin) {
-    next();
-  } else {
-    res.status(403).json({ message: "Access denied." });
-  }
-}
-
 // Register route
 router.post("/register", upload.single("profileImage"), async (req, res) => {
   try {
@@ -73,8 +64,16 @@ router.post("/login", async (req, res) => {
   res.json({ token, user });
 });
 
+const verifyAdmin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(403).json({ message: "Access denied." });
+  }
+};
+
 // Route to users
-router.get("/users", verifyAdmin, async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
     const users = await User.find({ isAdmin: false });
     res.json(users);

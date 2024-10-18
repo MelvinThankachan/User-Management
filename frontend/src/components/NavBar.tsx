@@ -26,9 +26,11 @@ const NavBar = () => {
     <nav className="bg-primary shadow w-screen">
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link to="/">
-          <h1 className="text-xl font-bold">
-            {user ? (user.isAdmin ? "Admin Home" : "User Home") : "Home"}
-          </h1>
+          <div>
+            <h1 className="text-xl font-bold">
+              {user ? (user.isAdmin ? "Admin Home" : "User Home") : "Home"}
+            </h1>
+          </div>
         </Link>
         {user ? (
           <div className="relative">
@@ -63,6 +65,11 @@ const NavBar = () => {
                   <Link to="/user-profile">
                     <li className="dropdown-item">User Profile</li>
                   </Link>
+                  {user.isAdmin && (
+                    <Link to={"/users-table"}>
+                      <li className="dropdown-item">Users Table</li>
+                    </Link>
+                  )}
                   <li className="dropdown-item" onClick={handleLogout}>
                     Logout
                   </li>

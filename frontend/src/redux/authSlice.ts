@@ -4,7 +4,7 @@ type User = {
   name: string;
   email: string;
   profileImage: string;
-  isAdmin: boolean
+  isAdmin: boolean;
 };
 
 type AuthState = {
@@ -37,6 +37,15 @@ const authSlice = createSlice({
     },
   },
 });
+
+export const loadUserFromLocalStorage = (): AuthState => {
+  const token = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
+  return {
+    token,
+    user: user ? JSON.parse(user) : null,
+  };
+};
 
 export const { setAuth, clearAuth } = authSlice.actions;
 export default authSlice.reducer;

@@ -9,6 +9,16 @@ const ProfilePage = () => {
   const user = useSelector((state: any) => state.auth.user);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null;
+  }
+
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [profileImage, setProfileImage] = useState<File | string>(
@@ -22,16 +32,6 @@ const ProfilePage = () => {
       : URL.createObjectURL(profileImage);
 
   const [editingMode, setEditingMode] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
-
-  if (!user) {
-    return null;
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +79,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center gap-5">
+    <div className="base">
       <NavBar />
 
       <div className="container p-6 bg-primary shadow rounded-lg border border-tertiary flex flex-col max-w-screen-sm gap-5">
