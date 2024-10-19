@@ -21,6 +21,12 @@ const router = express.Router();
 router.post("/register", upload.single("profileImage"), async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const profileImage = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -33,9 +39,13 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
 
     await user.save();
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "15m",
-    });
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
 
     res.status(201).json({ message: "User registered", token, user });
   } catch (error) {
@@ -64,18 +74,29 @@ router.post("/login", async (req, res) => {
   res.json({ token, user });
 });
 
-const verifyAdmin = (req, res, next) => {
-  if (req.user && req.user.isAdmin) {
+// Middleware to authenticate JWT
+const authenticateJWT = (req, res, next) => {
+  const token = req.headers["authorization"]?.split(" ")[1]; // Bearer token
+  if (!token) return res.sendStatus(403);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
     next();
-  } else {
-    res.status(403).json({ message: "Access denied." });
-  }
+  });
 };
 
-// Route to users
-router.get("/users", async (req, res) => {
+// Route to get users (admin only)
+router.get("/users", authenticateJWT, async (req, res) => {
   try {
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: "Access denied." });
+    }
+    console.log(req.user.name);
+
     const users = await User.find({ isAdmin: false });
+    console.log(users);
+
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });

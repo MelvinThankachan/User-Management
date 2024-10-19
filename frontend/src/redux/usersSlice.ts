@@ -1,11 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../utils/axios";
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
-  const response = await axios.get("/api/auth/users");
-  console.log(response.data);
-  
-  return response.data;
+  try {
+    const response = await axiosInstance.get("auth/users");
+    console.log("Fetched users:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
 });
 
 const userSlice = createSlice({
@@ -15,18 +19,18 @@ const userSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      state.users = action.payload;
-      // console.log(state.users);
-    });
-    //   .addCase(fetchUsers.rejected, (state, action) => {
-    //     console.log("Error");
-    //   })
-    //   .addCase(fetchUsers.pending, (state, action) => {
-    //     console.log("Pending");
-    //   });
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        console.log("Fetching users...");
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.users = action.payload;
+        console.log("Users fetched successfully:", state.users);
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        console.error("Failed to fetch users:", action.error);
+      });
   },
 });
 
-export const selectUsers = (state: any) => state.users.users;
 export default userSlice.reducer;

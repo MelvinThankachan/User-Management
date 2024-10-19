@@ -173,7 +173,9 @@ const ProfilePage = () => {
                     placeholder="Email Address"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value.trim())}
+                    onChange={(e) =>
+                      setEmail(e.target.value.trim().toLowerCase())
+                    }
                     className="input-field"
                   />
                 </div>

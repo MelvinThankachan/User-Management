@@ -27,7 +27,7 @@ const NavBar = () => {
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link to="/">
           <div>
-            <h1 className="text-xl font-bold">
+            <h1 className="text-3xl font-bold">
               {user ? (user.isAdmin ? "Admin Home" : "User Home") : "Home"}
             </h1>
           </div>
